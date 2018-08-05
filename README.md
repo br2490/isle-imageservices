@@ -1,12 +1,10 @@
-# ISLE Fedora
+# ISLE Image Services
 
 Based on:  
- - [Tomcat 8.5.31](https://hub.docker.com/_/tomcat/)
+ - [Tomcat 8.5.31](https://hub.docker.com/r/benjaminrosner/isle-tomcat/)
  - Oracle Java
- - Fedora Repository
  - Adore-djatoka
- - etc.  
- @todo complete me
+ - Cantaloupe 3.4.2  
 
 # Generic Usage
 
