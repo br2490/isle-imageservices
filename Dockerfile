@@ -11,22 +11,26 @@ LABEL org.label-schema.build-date="2018-08-05T17:13:02Z" \
       org.label-schema.vcs-url="https://github.com/Islandora-Collaboration-Group/isle-solr" \
       org.label-schema.vendor="Islandora Collaboration Group (ICG) - islandora-consortium-group@googlegroups.com" \
       org.label-schema.version="RC-20180805T171302Z" \
-      org.label-schema.schema-version="1.0"
-      # traefik.enable="true" \
-      # traefik.port="8080" \
-      # traefik.backend="imageservices" \
+      org.label-schema.schema-version="1.0" \
+      traefik.enable="true" \
+      traefik.port="8080" \
+      traefik.backend="isle-images"
       # traefik.frontend.rule="Host:images.isle.localdomain;"
 
 ###
 # Dependencies 
-RUN GEN_DEP_PACKS="imagemagick \
-    libimage-exiftool-perl \
+RUN GEN_DEP_PACKS="libimage-exiftool-perl \
     libtool \
     libpng-dev \
     libjpeg-dev \
     libopenjp2-7-dev \
     libtiff-dev \
     libgif-dev \
+    liblqr-1-0 \
+    libdjvulibre-dev \
+    libwmf0.2-7 \
+    libopenexr22 \
+    libwebp-dev \
     giflib-tools \
     ffmpeg \
     ffmpeg2theora \
@@ -41,6 +45,37 @@ RUN GEN_DEP_PACKS="imagemagick \
     apt-get install -y --no-install-recommends $GEN_DEP_PACKS && \
     ## Cleanup phase.
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+###
+# ImageMagick and OpenJPG
+RUN SOURCE_PACKS="imagemagick" && \
+    BUILD_DEPS="cmake" && \
+    echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
+    cp /etc/apt/sources.list /etc/apt/sources.list.bak && \
+    sed -i '/^# deb-src.*bionic.[mus]/ s/^# //' /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get build-dep -y -o APT::Get::Build-Dep-Automatic=true $SOURCE_PACKS && \
+    apt-get install -y --no-install-recommends $BUILD_DEPS && \
+    apt-mark auto cmake && \
+    cd /tmp && \
+    git clone https://github.com/uclouvain/openjpeg && \
+    cd openjpeg && \
+    mkdir build && cd build && \
+    cmake .. -DCMAKE_BUILD_TYPE=Release && \
+    make && \
+    make install && \
+    cd /tmp && \
+    wget https://www.imagemagick.org/download/ImageMagick.tar.gz && \
+    tar xf ImageMagick.tar.gz && \
+    cd ImageMagick-* && \
+    ./configure --without-x --without-magick-plus-plus --without-perl && \
+    make && \
+    make install && \
+    ldconfig && \
+    ## Cleanup phase.
+    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
+    rm /etc/apt/sources.list && mv /etc/apt/sources.list.bak /etc/apt/sources.list && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ###
