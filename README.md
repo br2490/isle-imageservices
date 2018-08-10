@@ -2,9 +2,8 @@
 
 Based on:  
  - [Tomcat 8.5.31](https://hub.docker.com/r/benjaminrosner/isle-tomcat/)
- - Oracle Java
- - Adore-djatoka
- - Cantaloupe 3.4.2  
+ - Adore-Djatoka 1.1 (will deprecate when the community does)
+ - Cantaloupe 3.4.3  (deployed via Tomcat, not standalone)
 
 # Generic Usage
 

@@ -3,19 +3,18 @@ FROM benjaminrosner/isle-tomcat:latest
 ARG BUILD_DATE
 ARG VCS_REF
 ARG VERSION
-LABEL org.label-schema.build-date="2018-08-05T17:13:02Z" \
+LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.name="ISLE Image Services" \
       org.label-schema.description="Serving all your images needs." \
       org.label-schema.url="https://islandora-collaboration-group.github.io" \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url="https://github.com/Islandora-Collaboration-Group/isle-solr" \
       org.label-schema.vendor="Islandora Collaboration Group (ICG) - islandora-consortium-group@googlegroups.com" \
-      org.label-schema.version="RC-20180805T171302Z" \
+      org.label-schema.version=$VERSION \
       org.label-schema.schema-version="1.0" \
       traefik.enable="true" \
       traefik.port="8080" \
       traefik.backend="isle-images"
-      # traefik.frontend.rule="Host:images.isle.localdomain;"
 
 ###
 # Dependencies 
@@ -99,22 +98,24 @@ RUN cd /tmp && \
     rm /usr/local/adore-djatoka-1.1/bin/*.bat /usr/local/adore-djatoka-1.1/dist/adore-djatoka.war
 
 ###
-# Cantaloupe 3.4.2 because I failed 4.x, and also failed to get this running as of 2018-08-05. Giving up for now.
+# Cantaloupe 3.4.3 because I failed 4.x, and also failed to get this running as of 2018-08-05. Giving up for now.
 # Ultimate thanks to Diego Pino Navarro's work on the Islandora Vagrant, for which the properties and delegates are copied from.
 RUN cd /tmp && \
-    wget https://github.com/medusa-project/cantaloupe/releases/download/v3.4.2/cantaloupe-3.4.2.zip && \
-    unzip cantaloupe-*.zip -d /usr/local && \
-    cp /usr/local/Cantaloupe-3.4.2/Cantaloupe-3.4.2.war /usr/local/tomcat/webapps/cantaloupe.war && \
+    wget https://github.com/medusa-project/cantaloupe/releases/download/v3.4.3/Cantaloupe-3.4.3.zip && \
+    unzip Cantaloupe-*.zip && \
+    rm Cantaloupe-3.4.3/*.sample && \
+    mkdir -p /usr/local/cantaloupe /usr/local/tomcat/temp/cantaloupe && \
+    cp Cantaloupe-3.4.3/* /usr/local/cantaloupe && \
+    mv /usr/local/cantaloupe/Cantaloupe-3.4.3.war /usr/local/tomcat/webapps/cantaloupe.war && \
     unzip /usr/local/tomcat/webapps/cantaloupe.war -d /usr/local/tomcat/webapps/cantaloupe && \
     ## Cleanup Phase.
-    rm /usr/local/Cantaloupe-3.4.2/Cantaloupe-3.4.2.war /usr/local/Cantaloupe-3.4.2/*.sample && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Set up environmental variables for tomcat & dependencies
 ENV KAKADU_HOME=/usr/local/adore-djatoka-1.1/bin \
      KAKADU_LIBRARY_PATH=/usr/local/adore-djatoka-1.1/lib/Linux-x86-64 \
      PATH=$PATH:/usr/local/fedora/server/bin:/usr/local/fedora/client/bin \
-     CATALINA_OPTS="-Dcantaloupe.config=/usr/local/Cantaloupe-3.4.2/cantaloupe.properties \
+     CATALINA_OPTS="-Dcantaloupe.config=/usr/local/cantaloupe/cantaloupe.properties \
 	-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true \
  	-Dkakadu.home=/usr/local/adore-djatoka-1.1/bin/Linux-x86-64 \
  	-Djava.library.path=/usr/local/adore-djatoka-1.1/lib/Linux-x86-64:/usr/local/tomcat/lib \
