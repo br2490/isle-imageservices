@@ -18,24 +18,9 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
 
 ###
 # Dependencies 
-RUN GEN_DEP_PACKS="libimage-exiftool-perl \
-    libtool \
-    libpng-dev \
-    libjpeg-dev \
-    libopenjp2-7-dev \
-    libtiff-dev \
-    libgif-dev \
-    liblqr-1-0 \
-    libdjvulibre-dev \
-    libwmf0.2-7 \
-    libopenexr22 \
-    libwebp-dev \
-    giflib-tools \
-    ffmpeg \
+RUN GEN_DEP_PACKS="ffmpeg \
     ffmpeg2theora \
     libavcodec-extra \
-    x264 \
-    lame \
     ghostscript \
     xpdf \
     poppler-utils" && \
@@ -48,15 +33,35 @@ RUN GEN_DEP_PACKS="libimage-exiftool-perl \
 
 ###
 # ImageMagick and OpenJPG
-RUN SOURCE_PACKS="imagemagick" && \
-    BUILD_DEPS="cmake" && \
+RUN BUILD_DEPS="build-essential \
+    cmake \
+    pkg-config \
+    libtool" && \
+    IMAGEMAGICK_LIBS="libbz2-dev \
+	libdjvulibre-dev \
+	libexif-dev \
+    libgif-dev \
+    libjpeg8 \
+    libjpeg-dev \
+	liblqr-dev \
+    libopenexr-dev \
+    libopenjp2-7-dev \
+    libpng-dev \
+    libraw-dev \
+    librsvg2-dev \
+    libtiff-dev \
+    libwmf-dev \
+    libwebp-dev \
+    libwmf-dev \
+    zlib1g-dev" && \
+    ## These are unused and actually install by libavcodec-extra, I believe.
+    IMAGEMAGICK_LIBS_EXTENDED="libfontconfig \
+    libfreetype6-dev" && \
     echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
-    cp /etc/apt/sources.list /etc/apt/sources.list.bak && \
-    sed -i '/^# deb-src.*bionic.[mus]/ s/^# //' /etc/apt/sources.list && \
     apt-get update && \
-    apt-get build-dep -y -o APT::Get::Build-Dep-Automatic=true $SOURCE_PACKS && \
-    apt-get install -y --no-install-recommends $BUILD_DEPS && \
-    apt-mark auto cmake && \
+    apt-get install -y --no-install-recommends -o APT::Get::Install-Automatic=true $BUILD_DEPS && \
+    apt-mark auto $BUILD_DEPS && \
+    apt-get install -y --no-install-recommends $IMAGEMAGICK_LIBS && \
     cd /tmp && \
     git clone https://github.com/uclouvain/openjpeg && \
     cd openjpeg && \
@@ -64,17 +69,17 @@ RUN SOURCE_PACKS="imagemagick" && \
     cmake .. -DCMAKE_BUILD_TYPE=Release && \
     make && \
     make install && \
+    ldconfig && \
     cd /tmp && \
     wget https://www.imagemagick.org/download/ImageMagick.tar.gz && \
     tar xf ImageMagick.tar.gz && \
     cd ImageMagick-* && \
-    ./configure --without-x --without-magick-plus-plus --without-perl && \
+    ./configure --enable-hdri --with-quantum-depth=16 --without-x --without-magick-plus-plus --without-perl --with-rsvg && \
     make && \
     make install && \
     ldconfig && \
     ## Cleanup phase.
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
-    rm /etc/apt/sources.list && mv /etc/apt/sources.list.bak /etc/apt/sources.list && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ###
