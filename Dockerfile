@@ -38,12 +38,12 @@ RUN BUILD_DEPS="build-essential \
     pkg-config \
     libtool" && \
     IMAGEMAGICK_LIBS="libbz2-dev \
-	libdjvulibre-dev \
-	libexif-dev \
+    libdjvulibre-dev \
+    libexif-dev \
     libgif-dev \
     libjpeg8 \
     libjpeg-dev \
-	liblqr-dev \
+    liblqr-dev \
     libopenexr-dev \
     libopenjp2-7-dev \
     libpng-dev \
