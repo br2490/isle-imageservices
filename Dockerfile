@@ -14,10 +14,9 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.schema-version="1.0" \
       traefik.enable="true" \
       traefik.port="8080" \
-      traefik.backend="isle-images"
+      traefik.backend="isle-imageservices"
 
-###
-# Dependencies 
+## Dependencies 
 RUN GEN_DEP_PACKS="ffmpeg \
     ffmpeg2theora \
     libavcodec-extra \
@@ -31,8 +30,7 @@ RUN GEN_DEP_PACKS="ffmpeg \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-###
-# ImageMagick and OpenJPG
+## ImageMagick and OpenJPG
 RUN BUILD_DEPS="build-essential \
     cmake \
     pkg-config \
@@ -54,7 +52,7 @@ RUN BUILD_DEPS="build-essential \
     libwebp-dev \
     libwmf-dev \
     zlib1g-dev" && \
-    ## These are unused and actually install by libavcodec-extra, I believe.
+    ## I believe these are unused and actually install by libavcodec-extra.
     IMAGEMAGICK_LIBS_EXTENDED="libfontconfig \
     libfreetype6-dev" && \
     echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
@@ -74,7 +72,7 @@ RUN BUILD_DEPS="build-essential \
     wget https://www.imagemagick.org/download/ImageMagick.tar.gz && \
     tar xf ImageMagick.tar.gz && \
     cd ImageMagick-* && \
-    ./configure --enable-hdri --with-quantum-depth=16 --without-x --without-magick-plus-plus --without-perl --with-rsvg && \
+    ./configure --enable-hdri --with-quantum-depth=16 --without-magick-plus-plus --without-perl --with-rsvg && \
     make && \
     make install && \
     ldconfig && \
@@ -82,8 +80,7 @@ RUN BUILD_DEPS="build-essential \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-###
-# Djatoka
+## Djatoka
 RUN cd /tmp && \
     wget https://sourceforge.mirrorservice.org/d/dj/djatoka/djatoka/1.1/adore-djatoka-1.1.tar.gz && \
     tar -xzf adore-djatoka-1.1.tar.gz -C /usr/local && \
@@ -102,14 +99,14 @@ RUN cd /tmp && \
     ## Cleanup Phase.
     rm /usr/local/adore-djatoka-1.1/bin/*.bat /usr/local/adore-djatoka-1.1/dist/adore-djatoka.war
 
-###
-# Cantaloupe 3.4.3 because I failed 4.x, and also failed to get this running as of 2018-08-05. Giving up for now.
-# Ultimate thanks to Diego Pino Navarro's work on the Islandora Vagrant, for which the properties and delegates are copied from.
+## Cantaloupe 3.4.3
+# Ultimate thanks to Diego Pino Navarro and the Islandora Community for work on the Islandora Vagrant.
+# The properties and delegates are copied and modified slightly from the Islandora Vagrant!
 RUN cd /tmp && \
     wget https://github.com/medusa-project/cantaloupe/releases/download/v3.4.3/Cantaloupe-3.4.3.zip && \
     unzip Cantaloupe-*.zip && \
     rm Cantaloupe-3.4.3/*.sample && \
-    mkdir -p /usr/local/cantaloupe /usr/local/tomcat/temp/cantaloupe && \
+    mkdir -p /usr/local/cantaloupe /usr/local/cantaloupe/temp /usr/local/cantaloupe/cache /var/log/cantaloupe && \
     cp Cantaloupe-3.4.3/* /usr/local/cantaloupe && \
     mv /usr/local/cantaloupe/Cantaloupe-3.4.3.war /usr/local/tomcat/webapps/cantaloupe.war && \
     unzip /usr/local/tomcat/webapps/cantaloupe.war -d /usr/local/tomcat/webapps/cantaloupe && \
@@ -118,13 +115,13 @@ RUN cd /tmp && \
 
 # Set up environmental variables for tomcat & dependencies
 ENV KAKADU_HOME=/usr/local/adore-djatoka-1.1/bin \
-     KAKADU_LIBRARY_PATH=/usr/local/adore-djatoka-1.1/lib/Linux-x86-64 \
-     PATH=$PATH:/usr/local/fedora/server/bin:/usr/local/fedora/client/bin \
-     CATALINA_OPTS="-Dcantaloupe.config=/usr/local/cantaloupe/cantaloupe.properties \
-	-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true \
- 	-Dkakadu.home=/usr/local/adore-djatoka-1.1/bin/Linux-x86-64 \
- 	-Djava.library.path=/usr/local/adore-djatoka-1.1/lib/Linux-x86-64:/usr/local/tomcat/lib \
- 	-DLD_LIBRARY_PATH=/usr/local/adore-djatoka-1.1/lib/Linux-x86-64:/usr/local/tomcat/lib"
+    KAKADU_LIBRARY_PATH=/usr/local/adore-djatoka-1.1/lib/Linux-x86-64 \
+    PATH=$PATH:/usr/local/fedora/server/bin:/usr/local/fedora/client/bin \
+    CATALINA_OPTS="-Dcantaloupe.config=/usr/local/cantaloupe/cantaloupe.properties \
+    -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true \
+    -Dkakadu.home=/usr/local/adore-djatoka-1.1/bin/Linux-x86-64 \
+    -Djava.library.path=/usr/local/adore-djatoka-1.1/lib/Linux-x86-64:/usr/local/tomcat/lib \
+    -DLD_LIBRARY_PATH=/usr/local/adore-djatoka-1.1/lib/Linux-x86-64:/usr/local/tomcat/lib"
 
 COPY rootfs /
 
