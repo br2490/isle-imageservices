@@ -22,7 +22,7 @@ Contains and Includes:
 ## Generic Usage
 
 ```
-docker run -it -p "8182:8182" --rm benjaminrosner/isle-imageservices bash
+docker run -it -p "8080:8080" --rm benjaminrosner/isle-imageservices bash
 ```
 
 ## Tomcat users
@@ -32,6 +32,5 @@ manager:isle_manager
 
 ## Cantaloupe Default Admin User
 
-Login at http://{IP}:8182/admin  
 Username: admin  
 Password: isle_admin  
