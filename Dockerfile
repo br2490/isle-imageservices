@@ -1,4 +1,4 @@
-FROM benjaminrosner/isle-tomcat:latest
+FROM benjaminrosner/isle-tomcat:serverjre8
 
 ARG BUILD_DATE
 ARG VCS_REF
@@ -116,7 +116,6 @@ RUN cd /tmp && \
 # Set up environmental variables for tomcat & dependencies
 ENV KAKADU_HOME=/usr/local/adore-djatoka-1.1/bin \
     KAKADU_LIBRARY_PATH=/usr/local/adore-djatoka-1.1/lib/Linux-x86-64 \
-    PATH=$PATH:/usr/local/fedora/server/bin:/usr/local/fedora/client/bin \
     CATALINA_OPTS="-Dcantaloupe.config=/usr/local/cantaloupe/cantaloupe.properties \
     -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true \
     -Dkakadu.home=/usr/local/adore-djatoka-1.1/bin/Linux-x86-64 \

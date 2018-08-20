@@ -7,7 +7,7 @@ Based on:
   - [ISLE-tomcat](https://hub.docker.com/r/benjaminrosner/isle-tomcat/)
     - Ubuntu 18.04 "Bionic" (@see [ISLE-ubuntu-basebox](https://hub.docker.com/r/benjaminrosner/isle-ubuntu-basebox/))
       - General Dependencies
-      - Oracle Java
+      - Oracle Java 8 Server JRE
       - Tomcat 8.5.31
   - [Cantaloupe 3.4.3](https://medusa-project.github.io/cantaloupe/) an IIIF comliant open-source dynamic image server
   - Adore-Djatoka 1.1 (deprecate when the community does)
