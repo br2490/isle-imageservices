@@ -19,10 +19,12 @@ Contains and Includes:
   - [OpenJPEG](http://www.openjpeg.org/)
   - [FFmepg](https://www.ffmpeg.org/) 
 
+Size: 1.16GB
+
 ## Generic Usage
 
 ```
-docker run -it -p "8080:8080" --rm benjaminrosner/isle-imageservices bash
+docker run -it -p "8080:8080" --rm benjaminrosner/isle-imageservices:{version} bash
 ```
 
 ## Tomcat users
