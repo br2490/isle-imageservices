@@ -106,7 +106,7 @@ RUN cd /tmp && \
     wget https://github.com/medusa-project/cantaloupe/releases/download/v3.4.3/Cantaloupe-3.4.3.zip && \
     unzip Cantaloupe-*.zip && \
     rm Cantaloupe-3.4.3/*.sample && \
-    mkdir -p /usr/local/cantaloupe /usr/local/cantaloupe/temp /usr/local/cantaloupe/cache /var/log/cantaloupe && \
+    mkdir -p /usr/local/cantaloupe /usr/local/cantaloupe/temp /usr/local/cantaloupe/cache /usr/local/tomcat/logs/cantaloupe && \
     cp Cantaloupe-3.4.3/* /usr/local/cantaloupe && \
     mv /usr/local/cantaloupe/Cantaloupe-3.4.3.war /usr/local/tomcat/webapps/cantaloupe.war && \
     unzip /usr/local/tomcat/webapps/cantaloupe.war -d /usr/local/tomcat/webapps/cantaloupe && \
