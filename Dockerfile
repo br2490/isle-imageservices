@@ -69,7 +69,7 @@ RUN BUILD_DEPS="build-essential \
     make install && \
     ldconfig && \
     cd /tmp && \
-    wget https://www.imagemagick.org/download/ImageMagick.tar.gz && \
+    curl -O https://www.imagemagick.org/download/ImageMagick.tar.gz && \
     tar xf ImageMagick.tar.gz && \
     cd ImageMagick-* && \
     ./configure --enable-hdri --with-quantum-depth=16 --without-magick-plus-plus --without-perl --with-rsvg && \
@@ -82,7 +82,7 @@ RUN BUILD_DEPS="build-essential \
 
 ## Djatoka
 RUN cd /tmp && \
-    wget https://sourceforge.mirrorservice.org/d/dj/djatoka/djatoka/1.1/adore-djatoka-1.1.tar.gz && \
+    curl -O https://sourceforge.mirrorservice.org/d/dj/djatoka/djatoka/1.1/adore-djatoka-1.1.tar.gz && \
     tar -xzf adore-djatoka-1.1.tar.gz -C /usr/local && \
     ln -s /usr/local/adore-djatoka-1.1/bin/Linux-x86-64/kdu_compress /usr/local/bin/kdu_compress && \
     ln -s /usr/local/adore-djatoka-1.1/bin/Linux-x86-64/kdu_expand /usr/local/bin/kdu_expand && \
@@ -91,19 +91,18 @@ RUN cd /tmp && \
     ln -s /usr/local/adore-djatoka-1.1/lib/Linux-x86-64/libkdu_v60R.so /usr/local/lib/libkdu_v60R.so && \
     cp /usr/local/adore-djatoka-1.1/dist/adore-djatoka.war /usr/local/tomcat/webapps/adore-djatoka.war && \
     unzip -o /usr/local/tomcat/webapps/adore-djatoka.war -d /usr/local/tomcat/webapps/adore-djatoka/ && \
-    sed -i 's#DJATOKA_HOME=`pwd`#DJATOKA_HOME=/usr/local/adore-djatoka-1.1#g' /usr/local/adore-djatoka-1.1/bin/env.sh && \
-    sed -i 's|`uname -p` = "x86_64"|`uname -m` = "x86_64"|' /usr/local/adore-djatoka-1.1/bin/env.sh && \
     echo "/usr/local/adore-djatoka-1.1/lib/Linux-x86-64" > /etc/ld.so.conf.d/kdu_libs.conf && \
     ldconfig && \
     sed -i 's/localhost:8080/isle.localdomain/g' /usr/local/tomcat/webapps/adore-djatoka/index.html && \
     ## Cleanup Phase.
-    rm /usr/local/adore-djatoka-1.1/bin/*.bat /usr/local/adore-djatoka-1.1/dist/adore-djatoka.war
+    cd /usr/local/adore-djatoka-1.1/bin && \
+    rm -rf *.bat Solaris-Sparc Solaris-Sparcv9 Solaris-x86 Win32 ../dist/adore-djatoka.war
 
 ## Cantaloupe 3.4.3
 # Ultimate thanks to Diego Pino Navarro and the Islandora Community for work on the Islandora Vagrant.
 # The properties and delegates are copied and modified slightly from the Islandora Vagrant!
 RUN cd /tmp && \
-    wget https://github.com/medusa-project/cantaloupe/releases/download/v3.4.3/Cantaloupe-3.4.3.zip && \
+    curl -O -L https://github.com/medusa-project/cantaloupe/releases/download/v3.4.3/Cantaloupe-3.4.3.zip && \
     unzip Cantaloupe-*.zip && \
     rm Cantaloupe-3.4.3/*.sample && \
     mkdir -p /usr/local/cantaloupe /usr/local/cantaloupe/temp /usr/local/cantaloupe/cache /usr/local/tomcat/logs/cantaloupe && \

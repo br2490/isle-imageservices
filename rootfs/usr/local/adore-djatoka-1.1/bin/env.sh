@@ -1,20 +1,22 @@
 #!/bin/sh
+# setup environment variables for shell script
+
 CURRENTDIR=$PWD
-LAUNCHDIR=/opt/adore-djatoka-1.1/bin
-DJATOKA_HOME=/opt/adore-djatoka-1.1
+LAUNCHDIR=/usr/local/adore-djatoka-1.1/bin
+DJATOKA_HOME=/usr/local/adore-djatoka-1.1
 LIBPATH=$DJATOKA_HOME/lib
 
 if [ `uname` = 'Linux' ] ; then
-  if [ `uname -p` = "x86_64" ] ; then
+  if [ `uname -m` = "x86_64" ] ; then
     # Assume Linux AMD 64 has 64-bit Java
     PLATFORM="Linux-x86-64"
-    LD_LIBRARY_PATH="$LIBPATH/$PLATFORM"
+    LD_LIBRARY_PATH="$LIBPATH/$PLATFORM:$LD_LIBRARY_PATH"
     export LD_LIBRARY_PATH
     KAKADU_LIBRARY_PATH="-DLD_LIBRARY_PATH=$LIBPATH/$PLATFORM"
   else
     # 32-bit Java
     PLATFORM="Linux-x86-32"
-    LD_LIBRARY_PATH="$LIBPATH/$PLATFORM"
+    LD_LIBRARY_PATH="$LIBPATH/$PLATFORM:$LD_LIBRARY_PATH"
     export LD_LIBRARY_PATH
     KAKADU_LIBRARY_PATH="-DLD_LIBRARY_PATH=$LIBPATH/$PLATFORM"
   fi
