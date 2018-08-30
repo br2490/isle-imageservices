@@ -22,7 +22,8 @@ RUN GEN_DEP_PACKS="ffmpeg \
     libavcodec-extra \
     ghostscript \
     xpdf \
-    poppler-utils" && \
+    poppler-utils \
+    ruby" && \
     echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
     apt-get update && \
     apt-get install -y --no-install-recommends $GEN_DEP_PACKS && \
@@ -99,16 +100,16 @@ RUN cd /tmp && \
     ## Cleanup Phase.
     rm /usr/local/adore-djatoka-1.1/bin/*.bat /usr/local/adore-djatoka-1.1/dist/adore-djatoka.war
 
-## Cantaloupe 3.4.3
+## Cantaloupe 3.4.4
 # Ultimate thanks to Diego Pino Navarro and the Islandora Community for work on the Islandora Vagrant.
 # The properties and delegates are copied and modified slightly from the Islandora Vagrant!
 RUN cd /tmp && \
-    wget https://github.com/medusa-project/cantaloupe/releases/download/v3.4.3/Cantaloupe-3.4.3.zip && \
+    wget https://github.com/medusa-project/cantaloupe/releases/download/v3.4.4/Cantaloupe-3.4.4.zip && \
     unzip Cantaloupe-*.zip && \
-    rm Cantaloupe-3.4.3/*.sample && \
+    rm Cantaloupe-3.4.4/*.sample && \
     mkdir -p /usr/local/cantaloupe /usr/local/cantaloupe/temp /usr/local/cantaloupe/cache /var/log/cantaloupe && \
-    cp Cantaloupe-3.4.3/* /usr/local/cantaloupe && \
-    mv /usr/local/cantaloupe/Cantaloupe-3.4.3.war /usr/local/tomcat/webapps/cantaloupe.war && \
+    cp Cantaloupe-3.4.4/* /usr/local/cantaloupe && \
+    mv /usr/local/cantaloupe/Cantaloupe-3.4.4.war /usr/local/tomcat/webapps/cantaloupe.war && \
     unzip /usr/local/tomcat/webapps/cantaloupe.war -d /usr/local/tomcat/webapps/cantaloupe && \
     ## Cleanup Phase.
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

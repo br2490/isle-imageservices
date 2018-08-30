@@ -8,7 +8,15 @@
 # Tested with 3.4.2.
 #
 ##
-
+##
+# Sample Ruby script containing stubs and documentation for all available
+# delegate methods. See the "Delegate Script" section of the user manual for
+# more information.
+#
+# This file may change from version to version.
+#
+# DO NOT EDIT! Instead, copy to a file named `delegates.rb` and edit that.
+#
 module Cantaloupe
 
   ##
@@ -102,9 +110,10 @@ module Cantaloupe
     ##
     # @param identifier [String] Image identifier
     # @param context [Hash] Context for this request
-    # @return [String,Hash<String,Object>,nil] S3 object key of the image 
-    #					corresponding to the given identifier, 
-    #                   or Hash including bucket and key, or nil if not found.
+    # @return [String,Hash<String,Object>,nil] Object key of the image
+    #         corresponding to the given identifier;
+    #                   or Hash including `bucket` and `key` keys;
+    #                   or nil if not found.
     #
     def self.get_object_key(identifier, context)
     end
@@ -127,10 +136,11 @@ module Cantaloupe
   module HttpResolver
 
     ##
-    # @param identifier [String] Image compound identifier from Islandora
+    # @param identifier [String] Image identifier
     # @param context [Hash] Context for this request
     # @return [String,Hash<String,String>,nil] String URL of the image
-    #         corresponding to the given identifier; or nil if not found.
+    #         corresponding to the given identifier; or a hash with `uri`,
+    #         `username`, and `secret` keys; or nil if not found.
     #
     def self.get_url(identifier, context)
       require 'cgi'
