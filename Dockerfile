@@ -1,4 +1,4 @@
-FROM benjaminrosner/isle-tomcat:serverjre8
+FROM benjaminrosner/isle-tomcat:latest
 
 ARG BUILD_DATE
 ARG VCS_REF
