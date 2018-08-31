@@ -98,24 +98,23 @@ RUN cd /tmp && \
     cd /usr/local/adore-djatoka-1.1/bin && \
     rm -rf *.bat Solaris-Sparc Solaris-Sparcv9 Solaris-x86 Win32 ../dist/adore-djatoka.war
 
-## Cantaloupe 3.4.3
-# Ultimate thanks to Diego Pino Navarro and the Islandora Community for work on the Islandora Vagrant.
-# The properties and delegates are copied and modified slightly from the Islandora Vagrant!
+## Cantaloupe 4.0.1
 RUN cd /tmp && \
-    curl -O -L https://github.com/medusa-project/cantaloupe/releases/download/v3.4.3/Cantaloupe-3.4.3.zip && \
-    unzip Cantaloupe-*.zip && \
-    rm Cantaloupe-3.4.3/*.sample && \
+    curl -O -L https://github.com/medusa-project/cantaloupe/releases/download/v4.0.1/cantaloupe-4.0.1.zip && \
+    unzip cantaloupe-*.zip && \
+    rm cantaloupe-4.0.1/*.sample && \
     mkdir -p /usr/local/cantaloupe /usr/local/cantaloupe/temp /usr/local/cantaloupe/cache /usr/local/tomcat/logs/cantaloupe && \
-    cp Cantaloupe-3.4.3/* /usr/local/cantaloupe && \
-    mv /usr/local/cantaloupe/Cantaloupe-3.4.3.war /usr/local/tomcat/webapps/cantaloupe.war && \
+    cp -r cantaloupe-4.0.1/* /usr/local/cantaloupe && \
+    mv /usr/local/cantaloupe/cantaloupe-4.0.1.war /usr/local/tomcat/webapps/cantaloupe.war && \
     unzip /usr/local/tomcat/webapps/cantaloupe.war -d /usr/local/tomcat/webapps/cantaloupe && \
+    chown tomcat /usr/local/cantaloupe -R && \
     ## Cleanup Phase.
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Set up environmental variables for tomcat & dependencies
 ENV KAKADU_HOME=/usr/local/adore-djatoka-1.1/bin \
     KAKADU_LIBRARY_PATH=/usr/local/adore-djatoka-1.1/lib/Linux-x86-64 \
-    CATALINA_OPTS="-Dcantaloupe.config=/usr/local/cantaloupe/cantaloupe.properties \
+    CATALINA_OPTS="-Dcantaloupe.config=/usr/local/cantaloupe4/cantaloupe.properties \
     -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true \
     -Dkakadu.home=/usr/local/adore-djatoka-1.1/bin/Linux-x86-64 \
     -Djava.library.path=/usr/local/adore-djatoka-1.1/lib/Linux-x86-64:/usr/local/tomcat/lib \
