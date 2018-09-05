@@ -1,0 +1,3 @@
+#!/usr/bin/with-contenv sh
+
+/usr/local/bin/confd -onetime -backend env
