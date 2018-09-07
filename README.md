@@ -9,7 +9,7 @@ Based on:
       - General Dependencies
       - Oracle Java 8 Server JRE
       - Tomcat 8.5.31
-  - [Cantaloupe 3.4.3](https://medusa-project.github.io/cantaloupe/) an IIIF comliant open-source dynamic image server
+  - [Cantaloupe 4.0.1](https://medusa-project.github.io/cantaloupe/) an IIIF comliant open-source dynamic image server
   - Adore-Djatoka 1.1 (deprecate when the community does)
 
 Contains and Includes:
@@ -19,7 +19,7 @@ Contains and Includes:
   - [OpenJPEG](http://www.openjpeg.org/)
   - [FFmepg](https://www.ffmpeg.org/) 
 
-Size: 1.16GB
+Size: 1.2GB
 
 ## Generic Usage
 

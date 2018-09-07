@@ -1,0 +1,11 @@
+[template]
+src = "imageserv/cantaloupe4.properties.tpl"
+dest = "/usr/local/cantaloupe4/cantaloupe.properties"
+uid = 1000
+gid = 1000
+mode = "0644"
+keys = [
+  "/cantaloupe/admin/interface/enable",
+  "/cantaloupe/admin/user",
+  "/cantaloupe/admin/pass",
+]

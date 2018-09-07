@@ -112,7 +112,11 @@ RUN cd /tmp && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Set up environmental variables for tomcat & dependencies
-ENV KAKADU_HOME=/usr/local/adore-djatoka-1.1/bin \
+ENV JAVA_MAX_MEM=${JAVA_MAX_MEM:-2G} \
+    JAVA_MIN_MEM=${JAVA_MIN_MEM:-0} \
+    ## Per Gavin, we are no longer using -XX:+UseConcMarkSweepGC, instead G1GC.
+    JAVA_OPTS='-Djava.awt.headless=true -server -Xmx${JAVA_MAX_MEM} -Xms${JAVA_MIN_MEM} -XX:+UseG1GC -XX:+UseStringDeduplication -XX:MaxGCPauseMillis=200 -XX:InitiatingHeapOccupancyPercent=70' \
+    KAKADU_HOME=/usr/local/adore-djatoka-1.1/bin \
     KAKADU_LIBRARY_PATH=/usr/local/adore-djatoka-1.1/lib/Linux-x86-64 \
     CATALINA_OPTS="-Dcantaloupe.config=/usr/local/cantaloupe4/cantaloupe.properties \
     -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true \

@@ -105,9 +105,9 @@ endpoint.iiif.min_tile_size = 1024
 endpoint.iiif.2.restrict_to_sizes = false
 
 # Enables the Control Panel, at /admin.
-endpoint.admin.enabled = true
-endpoint.admin.username = admin
-endpoint.admin.secret = isle_admin
+endpoint.admin.enabled = {{getv "/cantaloupe/admin/interface/enable" "false"}}
+endpoint.admin.username = {{getv "/cantaloupe/admin/user" "nopeNope"}}
+endpoint.admin.secret = {{getv "/cantaloupe/admin/pass" "nopeStopPasswords"}}
 
 # Enables the administrative HTTP API. (See the user manual.)
 endpoint.api.enabled = false
