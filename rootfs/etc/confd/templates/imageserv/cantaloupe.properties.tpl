@@ -606,7 +606,7 @@ redaction.enabled = false
 #----------------------------------------
 
 # `trace`, `debug`, `info`, `warn`, `error`, `all`, or `off`
-log.application.level = info
+log.application.level = error
 
 log.application.ConsoleAppender.enabled = true
 
