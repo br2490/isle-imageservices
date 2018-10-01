@@ -1,20 +1,4 @@
-FROM benjaminrosner/isle-tomcat:serverjre8
-
-ARG BUILD_DATE
-ARG VCS_REF
-ARG VERSION
-LABEL org.label-schema.build-date=$BUILD_DATE \
-      org.label-schema.name="ISLE Image Services" \
-      org.label-schema.description="Serving all your images needs." \
-      org.label-schema.url="https://islandora-collaboration-group.github.io" \
-      org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.vcs-url="https://github.com/Islandora-Collaboration-Group/isle-imageservices" \
-      org.label-schema.vendor="Islandora Collaboration Group (ICG) - islandora-consortium-group@googlegroups.com" \
-      org.label-schema.version=$VERSION \
-      org.label-schema.schema-version="1.0" \
-      traefik.enable="true" \
-      traefik.port="8080" \
-      traefik.backend="isle-imageservices"
+FROM islandoracollabgroup/isle-tomcat:serverjre8
 
 ## Dependencies 
 RUN GEN_DEP_PACKS="ffmpeg \
@@ -123,6 +107,21 @@ ENV JAVA_MAX_MEM=${JAVA_MAX_MEM:-2G} \
     -Dkakadu.home=/usr/local/adore-djatoka-1.1/bin/Linux-x86-64 \
     -Djava.library.path=/usr/local/adore-djatoka-1.1/lib/Linux-x86-64:/usr/local/tomcat/lib \
     -DLD_LIBRARY_PATH=/usr/local/adore-djatoka-1.1/lib/Linux-x86-64:/usr/local/tomcat/lib"
+
+# Labels
+ARG BUILD_DATE
+ARG VCS_REF
+ARG VERSION
+LABEL org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.name="ISLE Image Services" \
+      org.label-schema.description="Serving all your images needs." \
+      org.label-schema.url="https://islandora-collaboration-group.github.io" \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url="https://github.com/Islandora-Collaboration-Group/isle-imageservices" \
+      org.label-schema.vendor="Islandora Collaboration Group (ICG) - islandora-consortium-group@googlegroups.com" \
+      org.label-schema.version=$VERSION \
+      org.label-schema.schema-version="1.0" \
+      traefik.port="8080"
 
 COPY rootfs /
 
